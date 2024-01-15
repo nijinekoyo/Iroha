@@ -25,9 +25,16 @@ export default defineConfig({
   },
   renderer: {
     resolve: {
-      alias: {
-        '@renderer': resolve('src/renderer/src')
-      }
+      alias: [
+        {
+          find: '@',
+          replacement: resolve('/src')
+        },
+        {
+          find: '@renderer',
+          replacement: resolve('/src/renderer/src')
+        }
+      ]
     },
     plugins: [vue()]
   }
