@@ -1,7 +1,7 @@
 /*
  * @Author: nijineko
  * @Date: 2024-01-15 21:51:16
- * @LastEditTime: 2024-01-15 22:33:12
+ * @LastEditTime: 2024-01-15 23:16:44
  * @LastEditors: nijineko
  * @Description: 
  * @FilePath: \Epub-Reader\src\main\index.ts
@@ -20,7 +20,7 @@ function createWindow(): void {
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
-      preload: join(__dirname, '@/preload/index.js'),
+      preload: join(__dirname, '../preload/index.mjs'),
       sandbox: false
     }
   })
