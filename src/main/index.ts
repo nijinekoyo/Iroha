@@ -1,3 +1,11 @@
+/*
+ * @Author: nijineko
+ * @Date: 2024-01-15 21:51:16
+ * @LastEditTime: 2024-01-15 22:33:12
+ * @LastEditors: nijineko
+ * @Description: 
+ * @FilePath: \Epub-Reader\src\main\index.ts
+ */
 import { app, shell, BrowserWindow } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
@@ -31,7 +39,7 @@ function createWindow(): void {
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
-    mainWindow.loadFile(join(__dirname, '@renderer/index.html'))
+    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 }
 
