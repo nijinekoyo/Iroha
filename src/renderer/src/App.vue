@@ -7,11 +7,11 @@
  * @FilePath: \Epub-Reader\src\renderer\src\App.vue
 -->
 <template>
-  <epub-reader></epub-reader>
+  <router-view />
 </template>
 
 <script setup lang="ts">
-import epubReader from '@renderer/components/epub/reader.vue';
+
 </script>
 
 <style scoped></style>
