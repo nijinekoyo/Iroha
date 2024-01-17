@@ -1,7 +1,7 @@
 <!--
  * @Author: nijineko
  * @Date: 2024-01-15 22:34:52
- * @LastEditTime: 2024-01-17 01:56:15
+ * @LastEditTime: 2024-01-17 20:56:50
  * @LastEditors: nijineko
  * @Description: epub阅读器组件
  * @FilePath: \Epub-Reader\src\renderer\src\components\epub\reader.vue
@@ -152,12 +152,12 @@ const render = () => {
         });
 
         // 渲染
-        await rendition.display();
+        await rendition.display(props.pagination.page - 1);
 
         let location: any = rendition.currentLocation();
         // 写入分页数据
         paginationData.value = {
-            page: 1,
+            page: props.pagination.page,
             displayedTotal: location.start.displayed.total,
             pageCount: bookData.spine.length,
         }
@@ -196,7 +196,6 @@ const nextPage = async () => {
             }
         }
 
-        console.log(paginationData.value.page - 1);
         await rendition.display(paginationData.value.page - 1);
 
         // 释放锁
