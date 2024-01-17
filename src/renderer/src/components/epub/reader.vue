@@ -1,7 +1,7 @@
 <!--
  * @Author: nijineko
  * @Date: 2024-01-15 22:34:52
- * @LastEditTime: 2024-01-17 20:56:50
+ * @LastEditTime: 2024-01-17 21:54:45
  * @LastEditors: nijineko
  * @Description: epub阅读器组件
  * @FilePath: \Epub-Reader\src\renderer\src\components\epub\reader.vue
@@ -60,7 +60,7 @@
 import epub from '@renderer/tools/epub';
 import type { pagination } from '@renderer/typings/pagination';
 import { Rendition } from 'epubjs';
-import { useMessage, NButton, NIcon, NTag, NDropdown } from 'naive-ui';
+import { useMessage, NButton, NIcon, NTag, NDropdown, NSlider } from 'naive-ui';
 import { Component, PropType, computed, h, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import {
@@ -120,6 +120,54 @@ const menuOptions = [
         label: '返回主页',
         key: 'home',
         icon: renderIcon(homeIcon),
+    },
+    {
+        key: 'progress',
+        type: 'render',
+        render: () => {
+            return h(
+                'div',
+                {
+                    class: 'm-3 w-72',
+                },
+                [
+                    h(
+                        'div', {},
+                        {
+                            default: () => '进度'
+                        }
+                    ),
+                    h(
+                        'div',
+                        {
+                            class: 'flex items-center',
+                        },
+                        [
+                            h(NSlider, {
+                                min: 1,
+                                max: paginationData.value.pageCount,
+                                formatTooltip: (value: number) => {
+                                    return `${value} / ${paginationData.value.pageCount}`;
+                                },
+                                value: paginationData.value.page,
+                                onUpdateValue: (value: number) => {
+                                    paginationData.value.page = value;
+                                },
+                                onDragend: progressDragend,
+                            }),
+                            h(
+                                'div', {
+                                    class: 'ml-2 whitespace-nowrap',
+                                },
+                                {
+                                    default: () => `${paginationData.value.page} / ${paginationData.value.pageCount}`
+                                }
+                            ),
+                        ]
+                    )
+                ]
+            )
+        }
     },
 ];
 
@@ -181,18 +229,18 @@ const nextPage = async () => {
             return;
         }
 
+        // 更新分页数据
+        paginationData.value.page = paginationData.value.page + paginationData.value.displayedTotal;
+
         // 检查页面总数是否为偶数
-        if (paginationData.value.pageCount % 2 == 0) {
-            // 更新分页数据
-            paginationData.value.page = paginationData.value.page + paginationData.value.displayedTotal;
-        } else {
+        if (paginationData.value.pageCount % 2 != 0) {
             // 检查是否为倒数第二页
             if (currentEndPage == paginationData.value.pageCount - 1) {
                 // 更新分页数据
-                paginationData.value.page = paginationData.value.page + 1;
-            } else {
-                // 更新分页数据
-                paginationData.value.page = paginationData.value.page + paginationData.value.displayedTotal;
+                paginationData.value.displayedTotal = 1;
+
+                // 切换到单页显示
+                rendition.spread('none')
             }
         }
 
@@ -216,6 +264,18 @@ const prevPage = async () => {
             return;
         }
 
+        // 检查是否为单页显示，如果是则切换到双页显示
+        if (paginationData.value.displayedTotal == 1) {
+            // 切换到双页显示
+            rendition.spread('auto')
+
+            // 更新分页数据
+            paginationData.value.displayedTotal = 2;
+
+            // 更新渲染器，解决错页问题
+            await rendition.display(paginationData.value.page - 1);
+        }
+
         // 更新分页数据
         paginationData.value.page = paginationData.value.page - paginationData.value.displayedTotal;
 
@@ -224,6 +284,39 @@ const prevPage = async () => {
         // 释放锁
         release();
     }
+};
+
+// 进度条拖放回调
+const progressDragend = async () => {
+    // 上锁
+    const release = await togglePageLock.acquire()
+    if (rendition) {
+        // 检查是否为单页显示，如果是则切换到双页显示
+        if (paginationData.value.displayedTotal == 1) {
+            // 切换到双页显示
+            rendition.spread('auto')
+
+            // 更新分页数据
+            paginationData.value.displayedTotal = 2;
+        }
+
+        // 检查是否是拖到最后一页
+        if (paginationData.value.page == paginationData.value.pageCount) {
+            // 检查页面总数是否为奇数，且是否为双页显示
+            if (paginationData.value.pageCount % 2 == 1 && paginationData.value.displayedTotal == 2) {
+                // 切换到单页显示
+                rendition.spread('none')
+
+                // 更新分页数据
+                paginationData.value.displayedTotal = 1;
+            }
+        }
+
+        await rendition.display(paginationData.value.page - 1);
+    }
+
+    // 释放锁
+    release();
 };
 
 // 菜单选项选择事件
