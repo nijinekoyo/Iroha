@@ -3,7 +3,8 @@
   "include": [
     "electron.vite.config.*",
     "src/main/*",
-    "src/preload/**/*"
+    "src/preload/**/*",
+    "src/typings/*"
   ],
   "compilerOptions": {
     "composite": true,
@@ -12,6 +13,9 @@
     ],
     "baseUrl": ".",
     "paths": {
+      "@/*": [
+        "src/*"
+      ],
       "@renderer/*": [
         "src/renderer/src/*"
       ]

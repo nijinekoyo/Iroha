@@ -1,12 +1,12 @@
 /*
  * @Author: nijineko
  * @Date: 2024-01-17 22:41:46
- * @LastEditTime: 2024-01-18 18:08:08
+ * @LastEditTime: 2024-01-18 18:21:42
  * @LastEditors: nijineko
  * @Description: 书籍管理封装
  * @FilePath: \Epub-Reader\src\preload\plugins\bookManagement\index.ts
  */
-import { books } from "../../typings/database";
+import { books } from "@/typings/database";
 import database from "../sqlite";
 
 // 打开数据库

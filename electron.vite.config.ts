@@ -27,6 +27,10 @@ export default defineConfig({
     resolve: {
       alias: [
         {
+          find: '@',
+          replacement: resolve(__dirname, './src')
+        },
+        {
           find: '@renderer',
           replacement: resolve(__dirname, './src/renderer/src')
         }
