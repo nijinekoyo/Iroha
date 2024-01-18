@@ -1,13 +1,20 @@
 /*
  * @Author: nijineko
  * @Date: 2024-01-17 22:41:46
- * @LastEditTime: 2024-01-18 18:21:42
+ * @LastEditTime: 2024-01-18 23:58:30
  * @LastEditors: nijineko
  * @Description: 书籍管理封装
  * @FilePath: \Epub-Reader\src\preload\plugins\bookManagement\index.ts
  */
 import { books } from "@/typings/database";
 import database from "../sqlite";
+import path from "path";
+import fs from "fs";
+
+// 封面保存路径
+const coverPath = './data/images/covers/'
+// 书籍保存路径
+const bookPath = './data/books/'
 
 // 打开数据库
 let db = await database.openDatabase()
@@ -47,9 +54,15 @@ const createBook = async (book: books): Promise<number> => {
     }
 
     try {
+        // 检查书籍SHA256是否已存在
+        const checkBook = await db.get<books>('SELECT * FROM books WHERE file_sha256 = ?', book.file_sha256)
+        if (checkBook) {
+            throw new Error('书籍已存在')
+        }
+
         const result = await db.run(`
             INSERT INTO books (name, file_path, file_sha256, type, cover, author, description)
-            VALUES (?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         `, book.name, book.file_path, book.file_sha256, book.type, book.cover, book.author, book.description)
 
         if (!result.lastID) {
@@ -100,12 +113,60 @@ const deleteBook = async (id: number): Promise<void> => {
     }
 }
 
+/**
+ * @description: 保存书籍封面
+ * @param {string} sha256 书籍sha256
+ * @param {ArrayBuffer} cover 封面数据
+ * @param {string} ext 封面文件后缀
+ * @return {Promise<string>} 返回保存路径
+ */
+const saveCover = async (sha256: string, cover: ArrayBuffer, ext: string): Promise<string> => {
+    let savePath = path.join(coverPath, sha256 + ext)
+
+    try {
+        // 创建封面保存目录
+        fs.mkdirSync(coverPath, { recursive: true })
+
+        // 保存封面
+        fs.writeFileSync(savePath, Buffer.from(cover))
+
+        return savePath
+    } catch (error) {
+        throw error
+    }
+}
+
+/**
+ * @description: 保存书籍
+ * @param {string} sha256 书籍sha256
+ * @param {ArrayBuffer} book 书籍数据
+ * @param {string} ext 书籍文件后缀
+ * @return {Promise<string>} 返回保存路径
+ */
+const saveBook = async (sha256: string, book: ArrayBuffer, ext: string): Promise<string> => {
+    let savePath = path.join(bookPath, sha256 + ext)
+
+    try {
+        // 创建书籍保存目录
+        fs.mkdirSync(bookPath, { recursive: true })
+
+        // 保存书籍
+        fs.writeFileSync(savePath, Buffer.from(book))
+
+        return savePath
+    } catch (error) {
+        throw error
+    }
+}
+
 const bookManagement = {
     getBooks,
     getBook,
     createBook,
     updateBook,
     deleteBook,
+    saveCover,
+    saveBook
 }
 
 export default bookManagement
