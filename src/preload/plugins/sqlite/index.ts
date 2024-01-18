@@ -46,6 +46,7 @@ const createTable = () => {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             file_path TEXT NOT NULL,
+            file_sha256 TEXT NOT NULL,
             type TEXT NOT NULL,
             cover TEXT,
             author TEXT,

@@ -1,7 +1,7 @@
 /*
  * @Author: nijineko
  * @Date: 2024-01-17 22:41:46
- * @LastEditTime: 2024-01-17 23:37:03
+ * @LastEditTime: 2024-01-18 18:08:08
  * @LastEditors: nijineko
  * @Description: 书籍管理封装
  * @FilePath: \Epub-Reader\src\preload\plugins\bookManagement\index.ts
@@ -48,9 +48,9 @@ const createBook = async (book: books): Promise<number> => {
 
     try {
         const result = await db.run(`
-            INSERT INTO books (name, file_path, type, cover, author, description)
+            INSERT INTO books (name, file_path, file_sha256, type, cover, author, description)
             VALUES (?, ?, ?, ?, ?, ?)
-        `, book.name, book.file_path, book.type, book.cover, book.author, book.description)
+        `, book.name, book.file_path, book.file_sha256, book.type, book.cover, book.author, book.description)
 
         if (!result.lastID) {
             throw new Error('创建书籍失败')
@@ -71,9 +71,9 @@ const updateBook = async (id: number, book: books): Promise<void> => {
     try {
         const result = await db.run(`
             UPDATE books
-            SET name = ?, file_path = ?, type = ?, cover = ?, author = ?, description = ?
+            SET name = ?, file_path = ?, file_sha256 = ?, type = ?, cover = ?, author = ?, description = ?
             WHERE id = ?
-        `, book.name, book.file_path, book.type, book.cover, book.author, book.description, id)
+        `, book.name, book.file_path, book.file_sha256, book.type, book.cover, book.author, book.description, id)
 
         if (!result.changes) {
             throw new Error('更新书籍失败')
