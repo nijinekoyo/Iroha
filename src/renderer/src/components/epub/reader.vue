@@ -1,7 +1,7 @@
 <!--
  * @Author: nijineko
  * @Date: 2024-01-15 22:34:52
- * @LastEditTime: 2024-01-17 21:54:45
+ * @LastEditTime: 2024-01-18 18:01:36
  * @LastEditors: nijineko
  * @Description: epub阅读器组件
  * @FilePath: \Epub-Reader\src\renderer\src\components\epub\reader.vue
@@ -114,6 +114,7 @@ const paginationData = computed({
 
 // 定义渲染器
 let rendition: Rendition | null = null;
+
 // 定义菜单选项
 const menuOptions = [
     {
@@ -157,10 +158,10 @@ const menuOptions = [
                             }),
                             h(
                                 'div', {
-                                    class: 'ml-2 whitespace-nowrap',
-                                },
+                                class: 'ml-2 whitespace-nowrap',
+                            },
                                 {
-                                    default: () => `${paginationData.value.page} / ${paginationData.value.pageCount}`
+                                    default: () => `${paginationData.value.page != 1 ? Math.round(paginationData.value.page / paginationData.value.pageCount * 100) : 0} % `
                                 }
                             ),
                         ]
