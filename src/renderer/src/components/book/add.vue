@@ -214,6 +214,7 @@ const bookAdd = async (CustomRequest: UploadCustomRequestOptions) => {
                         cover: coverPath,
                         author: bookData.metadata.creator,
                         description: bookData.metadata.description,
+                        progress: 1,
                     })
 
                     message.success('导入成功')

@@ -61,9 +61,9 @@ const createBook = async (book: books): Promise<number> => {
         }
 
         const result = await db.run(`
-            INSERT INTO books (name, file_path, file_sha256, type, cover, author, description)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        `, book.name, book.file_path, book.file_sha256, book.type, book.cover, book.author, book.description)
+            INSERT INTO books (name, file_path, file_sha256, type, cover, author, description, progress)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        `, book.name, book.file_path, book.file_sha256, book.type, book.cover, book.author, book.description, book.progress)
 
         if (!result.lastID) {
             throw new Error('创建书籍失败')
@@ -84,9 +84,9 @@ const updateBook = async (id: number, book: books): Promise<void> => {
     try {
         const result = await db.run(`
             UPDATE books
-            SET name = ?, file_path = ?, file_sha256 = ?, type = ?, cover = ?, author = ?, description = ?
+            SET name = ?, file_path = ?, file_sha256 = ?, type = ?, cover = ?, author = ?, description = ?, progress = ?
             WHERE id = ?
-        `, book.name, book.file_path, book.file_sha256, book.type, book.cover, book.author, book.description, id)
+        `, book.name, book.file_path, book.file_sha256, book.type, book.cover, book.author, book.description, book.progress, id)
 
         if (!result.changes) {
             throw new Error('更新书籍失败')

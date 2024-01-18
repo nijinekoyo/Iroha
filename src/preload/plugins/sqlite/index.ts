@@ -1,7 +1,7 @@
 /*
  * @Author: nijineko
  * @Date: 2024-01-17 22:13:41
- * @LastEditTime: 2024-01-18 18:26:23
+ * @LastEditTime: 2024-01-19 01:50:49
  * @LastEditors: nijineko
  * @Description: sqlite封装
  * @FilePath: \Epub-Reader\src\preload\plugins\sqlite\index.ts
@@ -52,7 +52,8 @@ const createTable = () => {
             type TEXT NOT NULL,
             cover TEXT,
             author TEXT,
-            description TEXT
+            description TEXT,
+            progress INTEGER DEFAULT 1
         )
     `)
 }
