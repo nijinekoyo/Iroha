@@ -6,12 +6,14 @@
 </div>
 
 ## 🖼️ 截图
-<div style="display: flex; justify-content: space-between;">
-  <div style="flex-basis: 24%;"><img src="docs/images/screenshots/1.png" alt="Screenshot 1" style="width: 100%;"></div>
-  <div style="flex-basis: 24%;"><img src="docs/images/screenshots/2.png" alt="Screenshot 2" style="width: 100%;"></div>
-  <div style="flex-basis: 24%;"><img src="docs/images/screenshots/3.png" alt="Screenshot 3" style="width: 100%;"></div>
-  <div style="flex-basis: 24%;"><img src="docs/images/screenshots/4.png" alt="Screenshot 4" style="width: 100%;"></div>
-</div>
+<details>
+  <summary>展开</summary>
+  
+  <img src="docs/images/screenshots/1.png" alt="Screenshot 1">
+  <img src="docs/images/screenshots/2.png" alt="Screenshot 2">
+  <img src="docs/images/screenshots/3.png" alt="Screenshot 3">
+  <img src="docs/images/screenshots/4.png" alt="Screenshot 4">
+</details>
 
 ## 📄 下载
 稳定构建: [GitHub Release](https://github.com/nijinekoyo/Iroha/releases)
