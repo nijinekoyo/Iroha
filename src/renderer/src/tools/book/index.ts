@@ -1,7 +1,7 @@
 /*
  * @Author: nijineko
  * @Date: 2024-01-19 01:25:06
- * @LastEditTime: 2024-01-19 21:27:39
+ * @LastEditTime: 2024-01-19 21:47:24
  * @LastEditors: nijineko
  * @Description: 书籍工具封装
  * @FilePath: \Epub-Reader\src\renderer\src\tools\book\index.ts
@@ -15,13 +15,14 @@ import { Book } from "epubjs";
 import { PackagingMetadataObject } from "epubjs/types/packaging";
 import Navigation from "epubjs/types/navigation";
 import { SpineItem } from "epubjs/types/section";
+import { LoadingBarInst } from "naive-ui/es/loading-bar/src/LoadingBarProvider";
 
 /**
  * @description: 保存书籍
  * @param {ArrayBuffer} fileData 书籍文件数据
  * @return {Promise<Boolean>} 保存结果
  */
-const save = async (fileData: ArrayBuffer, dialog?: DialogApiInjection): Promise<Boolean> => {
+const save = async (fileData: ArrayBuffer, dialog?: DialogApiInjection, loadingBar?: LoadingBarInst): Promise<Boolean> => {
     return new Promise<Boolean>(async (resolve, reject) => {
         try {
             // 解析epub文件
@@ -72,6 +73,10 @@ const save = async (fileData: ArrayBuffer, dialog?: DialogApiInjection): Promise
                 } catch (error: any) {
                     reject(error)
                 }
+            }
+
+            if (loadingBar) {
+                loadingBar.finish()
             }
 
             // 检查是否注入了Dialog，如果有则弹出提示框，否则直接保存

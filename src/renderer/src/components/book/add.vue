@@ -1,15 +1,14 @@
 <!--
  * @Author: nijineko
  * @Date: 2024-01-18 22:13:26
- * @LastEditTime: 2024-01-19 21:38:05
+ * @LastEditTime: 2024-01-19 21:47:09
  * @LastEditors: nijineko
  * @Description: 添加书籍组件
  * @FilePath: \Epub-Reader\src\renderer\src\components\book\add.vue
 -->
 <template>
     <div>
-        <n-upload :max="1" accept=".epub" :show-file-list="false" v-model:file-list="fileList"
-            :custom-request="bookAdd">
+        <n-upload :max="1" accept=".epub" :show-file-list="false" v-model:file-list="fileList" :custom-request="bookAdd">
             <div class="w-40 h-60">
                 <n-upload-dragger class="w-full h-full">
                     <div class="mt-7">
@@ -31,13 +30,14 @@ import { NUpload, NUploadDragger, NIcon, NText, UploadCustomRequestOptions, useD
 import {
     ArchiveOutline as ArchiveIcon
 } from '@vicons/ionicons5'
-import { useMessage } from 'naive-ui';
+import { useMessage, useLoadingBar } from 'naive-ui';
 import book from '@renderer/tools/book';
 import { ref } from 'vue';
 import { FileInfo } from 'naive-ui/es/upload/src/interface';
 
 const message = useMessage();
 const dialog = useDialog();
+const loadingBar = useLoadingBar();
 
 // 定义emits
 const emits = defineEmits([
@@ -50,10 +50,14 @@ const fileList = ref<FileInfo[]>([])
 // 书籍添加
 const bookAdd = async (CustomRequest: UploadCustomRequestOptions) => {
     try {
+        loadingBar.start()
+
         if (!CustomRequest.file.file) {
+            loadingBar.error()
             throw new Error('文件存在错误')
         }
         if (CustomRequest.file.file.type !== 'application/epub+zip') {
+            loadingBar.error()
             throw new Error('只能导入Epub文件')
         }
 
@@ -61,11 +65,12 @@ const bookAdd = async (CustomRequest: UploadCustomRequestOptions) => {
         let fileData = await CustomRequest.file.file.arrayBuffer()
 
         if (!fileData) {
+            loadingBar.error()
             throw new Error('文件存在错误')
         }
 
         // 保存书籍
-        let saveState = await book.save(fileData, dialog)
+        let saveState = await book.save(fileData, dialog, loadingBar)
         if (saveState) {
             message.success("导入成功")
 
@@ -76,6 +81,7 @@ const bookAdd = async (CustomRequest: UploadCustomRequestOptions) => {
         fileList.value = []
     } catch (error: any) {
         console.log(error)
+        loadingBar.error()
         message.error(error.message)
 
         // 清空文件列表
