@@ -1,7 +1,7 @@
 /*
  * @Author: nijineko
  * @Date: 2024-01-17 22:41:46
- * @LastEditTime: 2024-01-19 20:59:12
+ * @LastEditTime: 2024-01-19 22:08:09
  * @LastEditors: nijineko
  * @Description: 书籍管理封装
  * @FilePath: \Epub-Reader\src\preload\plugins\bookManagement\index.ts
@@ -21,14 +21,24 @@ let db = await database.openDatabase()
 
 /**
  * @description: 读取全部书籍
+ * @param {string} name 名字搜索
+ * @param {string} order 排序方式，例如`id DESC, id ASC`
  * @return {Promise<books[]>} 返回书籍列表
  */
-const getBooks = async (): Promise<books[]> => {
+const getBooks = async (name?: string, order?: string): Promise<books[]> => {
     if (!db) {
         throw new Error('数据库初始化失败')
     }
 
-    return await db.all<books[]>('SELECT * FROM books ORDER BY id DESC')
+    if (!order) {
+        order = 'id DESC'
+    }
+
+    return await db.all<books[]>(`
+    SELECT * FROM books 
+    ${name ? 'WHERE name LIKE "%?%"' : ''}
+    ORDER BY ?
+    `, ...name ? [name, order] : [order])
 }
 
 /**
