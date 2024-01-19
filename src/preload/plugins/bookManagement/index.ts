@@ -1,7 +1,7 @@
 /*
  * @Author: nijineko
  * @Date: 2024-01-17 22:41:46
- * @LastEditTime: 2024-01-19 20:26:27
+ * @LastEditTime: 2024-01-19 20:59:12
  * @LastEditors: nijineko
  * @Description: 书籍管理封装
  * @FilePath: \Epub-Reader\src\preload\plugins\bookManagement\index.ts
@@ -113,6 +113,33 @@ const updateBook = async (id: number, book: books): Promise<void> => {
 }
 
 /**
+ * @description: 更新阅读进度
+ * @param {number} id 书籍ID
+ * @param {number} progress 阅读进度
+ * @return {Promise<void>} 返回更新结果
+ */
+const updateBookProgress = async (id: number, progress: number): Promise<void> => {
+    if (!db) {
+        throw new Error('数据库初始化失败')
+    }
+
+    try {
+        const result = await db.run(`
+            UPDATE books
+            SET progress = ?, updated_at = ?
+            WHERE id = ?
+        `, progress, new Date(), id)
+
+        if (!result.changes) {
+            throw new Error('更新书籍失败')
+        }
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
+}
+
+/**
  * @description: 删除书籍
  * @param {number} id 书籍ID
  * @return {Promise<void>} 返回删除结果
@@ -212,6 +239,7 @@ const bookManagement = {
     saveCover,
     saveBook,
     deleteBookFile,
+    updateBookProgress,
 }
 
 export default bookManagement

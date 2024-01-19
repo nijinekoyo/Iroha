@@ -15,6 +15,11 @@ export default [
                 name: "home",
                 component: () => import('@renderer/pages/home.vue'),
             },
+            {
+                path: '/book/:id',
+                name: "book.read",
+                component: () => import('@renderer/pages/book/read.vue'),
+            }
         ],
     },
 ]

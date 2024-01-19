@@ -13,6 +13,7 @@ declare global {
       getBook: (id: number) => Promise<books>
       createBook: (book: books) => Promise<number>
       updateBook: (book: books) => Promise<void>
+      updateBookProgress: (id: number, progress: number) => Promise<void>
       deleteBook: (id: number) => Promise<void>
       saveCover: (sha256: string, cover: ArrayBuffer, ext: string) => Promise<string>
       saveBook: (sha256: string, book: ArrayBuffer, ext: string) => Promise<string>

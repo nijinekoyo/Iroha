@@ -47,9 +47,11 @@ import {
     Open24Filled as openIcon,
     Delete24Regular as deleteIcon,
 } from '@vicons/fluent'
+import { useRouter } from 'vue-router';
 
 const message = useMessage();
 const dialog = useDialog();
+const router = useRouter();
 
 // 定义props
 const props = defineProps({
@@ -102,6 +104,12 @@ const contextMenuOptions = ref<DropdownMixedOption[]>([
 
 // 跳转到阅读器
 const toReader = () => {
+    router.push({
+        name: 'book.read',
+        params: {
+            id: props.book.id
+        }
+    })
 }
 
 // 删除书籍
