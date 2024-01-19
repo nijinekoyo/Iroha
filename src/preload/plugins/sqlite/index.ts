@@ -58,6 +58,14 @@ const createTable = () => {
             updated_at INTEGER NOT NULL
         )
     `)
+
+    // 创建App数据表
+    db?.exec(`
+        CREATE TABLE IF NOT EXISTS app_data (
+            key TEXT PRIMARY KEY,
+            value TEXT
+        )
+    `)
 }
 
 const database = {

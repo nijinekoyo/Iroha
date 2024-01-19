@@ -18,6 +18,10 @@ declare global {
       saveCover: (sha256: string, cover: ArrayBuffer, ext: string) => Promise<string>
       saveBook: (sha256: string, book: ArrayBuffer, ext: string) => Promise<string>
       deleteBookFile: (id: number) => Promise<void>
+    },
+    appData: {
+      get: (key: string) => Promise<string | undefined>
+      set: (key: string, value: string) => Promise<void>
     }
   }
 }

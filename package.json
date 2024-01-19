@@ -29,6 +29,7 @@
     "electron-updater": "^6.1.7",
     "epubjs": "^0.3.93",
     "naive-ui": "^2.37.3",
+    "pinia": "^2.1.7",
     "postcss": "^8.4.33",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7",

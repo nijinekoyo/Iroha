@@ -2,6 +2,7 @@ import { contextBridge } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import fs from 'fs'
 import bookManagement from './plugins/bookManagement'
+import appData from './plugins/appData'
 
 // Custom APIs for renderer
 const api = {}
@@ -15,6 +16,7 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('api', api)
     contextBridge.exposeInMainWorld('fs', fs)
     contextBridge.exposeInMainWorld('bookManagement', bookManagement)
+    contextBridge.exposeInMainWorld('appData', appData)
   } catch (error) {
     console.error(error)
   }
