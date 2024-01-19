@@ -1,7 +1,7 @@
 <!--
  * @Author: nijineko
  * @Date: 2024-01-15 22:34:52
- * @LastEditTime: 2024-01-19 21:50:38
+ * @LastEditTime: 2024-01-20 01:46:20
  * @LastEditors: nijineko
  * @Description: epub阅读器组件
  * @FilePath: \Epub-Reader\src\renderer\src\components\epub\reader.vue
@@ -70,11 +70,14 @@ import {
 import {
     Menu as menuIcon,
     Home as homeIcon,
+    SettingsSharp as settingIcon,
 } from '@vicons/ionicons5';
 import { Mutex } from 'async-mutex';
+import useSetting from '@renderer/components/setting/setting';
 
 const message = useMessage();
 const router = useRouter();
+const setting = useSetting();
 
 // 定义props
 const props = defineProps({
@@ -121,6 +124,11 @@ const menuOptions = [
         label: '返回主页',
         key: 'home',
         icon: renderIcon(homeIcon),
+    },
+    {
+        label: '设置',
+        key: 'setting',
+        icon: renderIcon(settingIcon),
     },
     {
         key: 'progress',
@@ -329,6 +337,9 @@ const menuHandleSelect = (key: string) => {
             router.push({
                 name: 'home',
             });
+            break;
+        case 'setting':
+            setting.open();
             break;
     }
 };

@@ -1,7 +1,7 @@
 <!--
  * @Author: nijineko
  * @Date: 2024-01-16 12:15:37
- * @LastEditTime: 2024-01-20 01:35:08
+ * @LastEditTime: 2024-01-20 01:48:24
  * @LastEditors: nijineko
  * @Description: 首页
  * @FilePath: \Epub-Reader\src\renderer\src\pages\home.vue
@@ -9,20 +9,33 @@
 <template>
     <n-layout :native-scrollbar="false" class="h-screen">
         <div class="m-3 flex">
-            <n-input v-model:value="filterForm.name" type="text" placeholder="搜索书籍" clearable class="mr-2">
-                <template #prefix>
-                    <n-icon :component="searchIcon" />
-                </template>
-            </n-input>
-            <n-dropdown trigger="hover" :options="sortOptions" @select="sortHandleSelect">
-                <n-button>
+            <div class="w-full mr-2">
+                <n-input v-model:value="filterForm.name" type="text" placeholder="搜索书籍" clearable>
+                    <template #prefix>
+                        <n-icon :component="searchIcon" />
+                    </template>
+                </n-input>
+            </div>
+            <div class="mr-2">
+                <n-dropdown trigger="hover" :options="sortOptions" @select="sortHandleSelect">
+                    <n-button>
+                        <template #icon>
+                            <n-icon>
+                                <sort-icon />
+                            </n-icon>
+                        </template>
+                    </n-button>
+                </n-dropdown>
+            </div>
+            <div>
+                <n-button @click="settingHandleClick">
                     <template #icon>
                         <n-icon>
-                            <sort-icon />
+                            <setting-icon />
                         </n-icon>
                     </template>
                 </n-button>
-            </n-dropdown>
+            </div>
         </div>
 
         <div class="m-3">
@@ -45,13 +58,16 @@ import {
     Search as searchIcon,
     ArrowUp as upIcon,
     ArrowDown as downIcon,
+    SettingsSharp as settingIcon,
 } from '@vicons/ionicons5'
 import {
     ArrowSortDownLines24Regular as sortIcon,
 } from '@vicons/fluent'
+import useSetting from '@renderer/components/setting/setting';
 
 const message = useMessage();
 const settingStore = useSettingStore();
+const setting = useSetting();
 
 const renderIcon = (icon: Component) => {
     return () => {
@@ -100,6 +116,11 @@ const getBooks = async () => {
 const sortHandleSelect = (value: 'id ASC' | 'id DESC' | 'updated_at ASC' | 'updated_at DESC') => {
     console.log(sortOptions)
     filterForm.value.order = value
+}
+
+// 设置按钮回调
+const settingHandleClick = () => {
+    setting.open()
 }
 
 // 监听筛选条件变化
