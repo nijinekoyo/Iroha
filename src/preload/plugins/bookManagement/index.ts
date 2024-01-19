@@ -1,7 +1,7 @@
 /*
  * @Author: nijineko
  * @Date: 2024-01-17 22:41:46
- * @LastEditTime: 2024-01-18 23:58:30
+ * @LastEditTime: 2024-01-19 18:25:15
  * @LastEditors: nijineko
  * @Description: 书籍管理封装
  * @FilePath: \Epub-Reader\src\preload\plugins\bookManagement\index.ts
@@ -25,7 +25,7 @@ const getBooks = async (): Promise<books[]> => {
         throw new Error('数据库初始化失败')
     }
 
-    return await db.all<books[]>('SELECT * FROM books')
+    return await db.all<books[]>('SELECT * FROM books ORDER BY id DESC')
 }
 
 // 读取单个书籍
@@ -61,9 +61,9 @@ const createBook = async (book: books): Promise<number> => {
         }
 
         const result = await db.run(`
-            INSERT INTO books (name, file_path, file_sha256, type, cover, author, description, progress)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        `, book.name, book.file_path, book.file_sha256, book.type, book.cover, book.author, book.description, book.progress)
+            INSERT INTO books (name, file_path, file_sha256, type, cover, author, description, progress, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `, book.name, book.file_path, book.file_sha256, book.type, book.cover, book.author, book.description, book.progress, new Date(), new Date())
 
         if (!result.lastID) {
             throw new Error('创建书籍失败')
@@ -84,9 +84,9 @@ const updateBook = async (id: number, book: books): Promise<void> => {
     try {
         const result = await db.run(`
             UPDATE books
-            SET name = ?, file_path = ?, file_sha256 = ?, type = ?, cover = ?, author = ?, description = ?, progress = ?
+            SET name = ?, file_path = ?, file_sha256 = ?, type = ?, cover = ?, author = ?, description = ?, progress = ?, updated_at = ?
             WHERE id = ?
-        `, book.name, book.file_path, book.file_sha256, book.type, book.cover, book.author, book.description, book.progress, id)
+        `, book.name, book.file_path, book.file_sha256, book.type, book.cover, book.author, book.description, book.progress, id, new Date())
 
         if (!result.changes) {
             throw new Error('更新书籍失败')

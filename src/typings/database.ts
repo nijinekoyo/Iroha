@@ -1,10 +1,10 @@
 /*
  * @Author: nijineko
  * @Date: 2024-01-17 22:43:24
- * @LastEditTime: 2024-01-18 18:05:58
+ * @LastEditTime: 2024-01-19 18:13:36
  * @LastEditors: nijineko
  * @Description: 数据库类型定义
- * @FilePath: \Epub-Reader\src\preload\typings\database.ts
+ * @FilePath: \Epub-Reader\src\typings\database.ts
  */
 export type books = {
     id?: number, // ID
@@ -16,4 +16,6 @@ export type books = {
     author?: string, // 作者
     description?: string, // 描述
     progress: number, // 进度
+    created_at?: number, // 创建时间
+    updated_at?: number, // 更新时间
 }

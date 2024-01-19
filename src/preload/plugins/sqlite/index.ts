@@ -53,7 +53,9 @@ const createTable = () => {
             cover TEXT,
             author TEXT,
             description TEXT,
-            progress INTEGER DEFAULT 1
+            progress INTEGER DEFAULT 1,
+            created_at INTEGER NOT NULL,
+            updated_at INTEGER NOT NULL
         )
     `)
 }
