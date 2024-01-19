@@ -1,7 +1,7 @@
 <!--
  * @Author: nijineko
  * @Date: 2024-01-15 21:51:16
- * @LastEditTime: 2024-01-20 02:07:19
+ * @LastEditTime: 2024-01-20 02:50:29
  * @LastEditors: nijineko
  * @Description: App.vue
  * @FilePath: \Epub-Reader\src\renderer\src\App.vue
@@ -50,7 +50,7 @@ watch(() => settingStore.setting.theme, (newValue) => {
   }
 
   theme.value = undefined;
-});
+}, { immediate: true })
 </script>
 
 <style scoped></style>
