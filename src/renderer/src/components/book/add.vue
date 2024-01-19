@@ -1,7 +1,7 @@
 <!--
  * @Author: nijineko
  * @Date: 2024-01-18 22:13:26
- * @LastEditTime: 2024-01-19 01:46:25
+ * @LastEditTime: 2024-01-19 12:09:06
  * @LastEditors: nijineko
  * @Description: 添加书籍组件
  * @FilePath: \Epub-Reader\src\renderer\src\components\book\add.vue
@@ -17,7 +17,7 @@
                             <archive-icon />
                         </n-icon>
                     </div>
-                    <n-text class=" text-base">
+                    <n-text class="text-base">
                         点击或者拖动Epub文件到该区域导入
                     </n-text>
                 </n-upload-dragger>

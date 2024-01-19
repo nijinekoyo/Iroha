@@ -1,7 +1,7 @@
 <!--
  * @Author: nijineko
  * @Date: 2024-01-16 12:15:37
- * @LastEditTime: 2024-01-18 22:37:31
+ * @LastEditTime: 2024-01-19 12:12:51
  * @LastEditors: nijineko
  * @Description: 首页
  * @FilePath: \Epub-Reader\src\renderer\src\pages\home.vue
@@ -11,9 +11,9 @@
         <div class="m-3">
             <div class="grid grid-cols-[repeat(auto-fill,minmax(10rem,1fr))] gap-3 justify-items-center">
                 <book-add @add="getBooks()" />
+                <book-list-item v-for="book in bookDatas" :key="book.id" :book="book" />
             </div>
         </div>
-        {{ bookDatas }}
     </n-layout>
 </template>
 
@@ -22,6 +22,7 @@ import { onMounted, ref } from 'vue';
 import type { books } from '@/typings/database.ts';
 import { useMessage, NLayout } from 'naive-ui';
 import bookAdd from '@renderer/components/book/add.vue';
+import bookListItem from '@renderer/components/book/list/item.vue';
 
 const message = useMessage()
 

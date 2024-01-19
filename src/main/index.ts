@@ -1,15 +1,16 @@
 /*
  * @Author: nijineko
  * @Date: 2024-01-15 21:51:16
- * @LastEditTime: 2024-01-15 23:16:44
+ * @LastEditTime: 2024-01-19 12:46:51
  * @LastEditors: nijineko
  * @Description: 
  * @FilePath: \Epub-Reader\src\main\index.ts
  */
-import { app, shell, BrowserWindow } from 'electron'
+import { app, shell, BrowserWindow, protocol, net } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '/resources/icon.png?asset'
+import { pathToFileURL } from 'url'
 
 function createWindow(): void {
   // Create the browser window.
@@ -43,6 +44,18 @@ function createWindow(): void {
   }
 }
 
+// 注册特权协议
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: 'iroha-file',
+    privileges: {
+      standard: true,
+      secure: true,
+      supportFetchAPI: true
+    }
+  }
+])
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -58,6 +71,13 @@ app.whenReady().then(() => {
   })
 
   createWindow()
+
+  // 注册自定义本地文访问件协议
+  protocol.handle('iroha-file', (request) => {
+    const path = request.url.replace('iroha-file://', '');
+
+    return net.fetch(pathToFileURL(path).toString())
+  });
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
