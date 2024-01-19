@@ -1,7 +1,7 @@
 /*
  * @Author: nijineko
  * @Date: 2024-01-17 22:41:46
- * @LastEditTime: 2024-01-19 18:25:15
+ * @LastEditTime: 2024-01-19 20:26:27
  * @LastEditors: nijineko
  * @Description: 书籍管理封装
  * @FilePath: \Epub-Reader\src\preload\plugins\bookManagement\index.ts
@@ -19,7 +19,10 @@ const bookPath = './data/books/'
 // 打开数据库
 let db = await database.openDatabase()
 
-// 读取全部书籍
+/**
+ * @description: 读取全部书籍
+ * @return {Promise<books[]>} 返回书籍列表
+ */
 const getBooks = async (): Promise<books[]> => {
     if (!db) {
         throw new Error('数据库初始化失败')
@@ -28,7 +31,11 @@ const getBooks = async (): Promise<books[]> => {
     return await db.all<books[]>('SELECT * FROM books ORDER BY id DESC')
 }
 
-// 读取单个书籍
+/**
+ * @description: 读取单个书籍
+ * @param {number} id 书籍ID
+ * @return {Promise<books>} 返回书籍信息
+ */
 const getBook = async (id: number): Promise<books> => {
     if (!db) {
         throw new Error('数据库初始化失败')
@@ -47,7 +54,11 @@ const getBook = async (id: number): Promise<books> => {
     }
 }
 
-// 创建书籍
+/**
+ * @description: 创建书籍
+ * @param {books} book 书籍信息
+ * @return {Promise<number>} 返回书籍ID
+ */
 const createBook = async (book: books): Promise<number> => {
     if (!db) {
         throw new Error('数据库初始化失败')
@@ -75,7 +86,12 @@ const createBook = async (book: books): Promise<number> => {
     }
 }
 
-// 更新书籍
+/**
+ * @description: 更新书籍
+ * @param {number} id 书籍ID
+ * @param {books} book 书籍信息
+ * @return {Promise<void>} 返回更新结果
+ */
 const updateBook = async (id: number, book: books): Promise<void> => {
     if (!db) {
         throw new Error('数据库初始化失败')
@@ -96,7 +112,11 @@ const updateBook = async (id: number, book: books): Promise<void> => {
     }
 }
 
-// 删除书籍
+/**
+ * @description: 删除书籍
+ * @param {number} id 书籍ID
+ * @return {Promise<void>} 返回删除结果
+ */
 const deleteBook = async (id: number): Promise<void> => {
     if (!db) {
         throw new Error('数据库初始化失败')
@@ -159,6 +179,30 @@ const saveBook = async (sha256: string, book: ArrayBuffer, ext: string): Promise
     }
 }
 
+/**
+ * @description: 删除书籍文件
+ * @param {number} id 书籍id
+ * @return {Promise<void>} 返回删除结果
+ */
+const deleteBookFile = async (id: number): Promise<void> => {
+    try {
+        // 读取书籍
+        const book = await getBook(id)
+
+        // 删除书籍文件
+        fs.unlinkSync(book.file_path)
+
+        // 删除封面文件
+        if (book.cover) {
+            fs.unlinkSync(book.cover)
+        }
+
+        return
+    } catch (error) {
+        throw error
+    }
+}
+
 const bookManagement = {
     getBooks,
     getBook,
@@ -166,7 +210,8 @@ const bookManagement = {
     updateBook,
     deleteBook,
     saveCover,
-    saveBook
+    saveBook,
+    deleteBookFile,
 }
 
 export default bookManagement

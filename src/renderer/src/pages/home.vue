@@ -11,7 +11,7 @@
         <div class="m-3">
             <div class="grid grid-cols-[repeat(auto-fill,minmax(10rem,1fr))] gap-3 justify-items-center">
                 <book-add @add="getBooks()" />
-                <book-list-item v-for="book in bookDatas" :key="book.id" :book="book" />
+                <book-list-item v-for="book in bookDatas" :key="book.id" :book="book" @update="getBooks()" />
             </div>
         </div>
     </n-layout>

@@ -16,6 +16,7 @@ declare global {
       deleteBook: (id: number) => Promise<void>
       saveCover: (sha256: string, cover: ArrayBuffer, ext: string) => Promise<string>
       saveBook: (sha256: string, book: ArrayBuffer, ext: string) => Promise<string>
+      deleteBookFile: (id: number) => Promise<void>
     }
   }
 }
