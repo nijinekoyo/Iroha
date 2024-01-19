@@ -7,50 +7,48 @@
  * @FilePath: \Epub-Reader\src\renderer\src\pages\home.vue
 -->
 <template>
-    <n-layout :native-scrollbar="false" class="h-screen">
-        <div class="m-3 flex">
-            <div class="w-full mr-2">
-                <n-input v-model:value="filterForm.name" type="text" placeholder="搜索书籍" clearable>
-                    <template #prefix>
-                        <n-icon :component="searchIcon" />
-                    </template>
-                </n-input>
-            </div>
-            <div class="mr-2">
-                <n-dropdown trigger="hover" :options="sortOptions" @select="sortHandleSelect">
-                    <n-button>
-                        <template #icon>
-                            <n-icon>
-                                <sort-icon />
-                            </n-icon>
-                        </template>
-                    </n-button>
-                </n-dropdown>
-            </div>
-            <div>
-                <n-button @click="settingHandleClick">
+    <div class="m-3 flex">
+        <div class="w-full mr-2">
+            <n-input v-model:value="filterForm.name" type="text" placeholder="搜索书籍" clearable>
+                <template #prefix>
+                    <n-icon :component="searchIcon" />
+                </template>
+            </n-input>
+        </div>
+        <div class="mr-2">
+            <n-dropdown trigger="hover" :options="sortOptions" @select="sortHandleSelect">
+                <n-button>
                     <template #icon>
                         <n-icon>
-                            <setting-icon />
+                            <sort-icon />
                         </n-icon>
                     </template>
                 </n-button>
-            </div>
+            </n-dropdown>
         </div>
+        <div>
+            <n-button @click="settingHandleClick">
+                <template #icon>
+                    <n-icon>
+                        <setting-icon />
+                    </n-icon>
+                </template>
+            </n-button>
+        </div>
+    </div>
 
-        <div class="m-3">
-            <div class="grid grid-cols-[repeat(auto-fill,minmax(10rem,1fr))] gap-3 justify-items-center">
-                <book-add @add="getBooks()" />
-                <book-list-item v-for="book in bookDatas" :key="book.id" :book="book" @update="getBooks()" />
-            </div>
+    <div class="m-3">
+        <div class="grid grid-cols-[repeat(auto-fill,minmax(10rem,1fr))] gap-3 justify-items-center">
+            <book-add @add="getBooks()" />
+            <book-list-item v-for="book in bookDatas" :key="book.id" :book="book" @update="getBooks()" />
         </div>
-    </n-layout>
+    </div>
 </template>
 
 <script setup lang="ts">
 import { Component, computed, h, onMounted, ref, watch } from 'vue';
 import type { books } from '@/typings/database';
-import { useMessage, NLayout, NInput, NIcon, NDropdown, NButton } from 'naive-ui';
+import { useMessage, NInput, NIcon, NDropdown, NButton } from 'naive-ui';
 import bookAdd from '@renderer/components/book/add.vue';
 import bookListItem from '@renderer/components/book/list/item.vue';
 import { useSettingStore } from '@renderer/plugins/store';

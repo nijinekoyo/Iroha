@@ -1,7 +1,7 @@
 <!--
  * @Author: nijineko
  * @Date: 2024-01-15 22:34:52
- * @LastEditTime: 2024-01-20 01:46:20
+ * @LastEditTime: 2024-01-20 02:38:34
  * @LastEditors: nijineko
  * @Description: epub阅读器组件
  * @FilePath: \Epub-Reader\src\renderer\src\components\epub\reader.vue
@@ -60,8 +60,8 @@
 import epub from '@renderer/tools/epub';
 import type { pagination } from '@renderer/typings/pagination';
 import { Rendition } from 'epubjs';
-import { useMessage, NButton, NIcon, NTag, NDropdown, NSlider } from 'naive-ui';
-import { Component, PropType, computed, h, onMounted, onUnmounted } from 'vue';
+import { useMessage, NButton, NIcon, NTag, NDropdown, NSlider, useOsTheme, NText } from 'naive-ui';
+import { Component, PropType, computed, h, onMounted, onUnmounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import {
     ChevronLeft12Filled as leftIcon,
@@ -74,10 +74,13 @@ import {
 } from '@vicons/ionicons5';
 import { Mutex } from 'async-mutex';
 import useSetting from '@renderer/components/setting/setting';
+import { useSettingStore } from '@renderer/plugins/store';
 
 const message = useMessage();
 const router = useRouter();
 const setting = useSetting();
+const settingStore = useSettingStore();
+const osTheme = useOsTheme();
 
 // 定义props
 const props = defineProps({
@@ -141,7 +144,7 @@ const menuOptions = [
                 },
                 [
                     h(
-                        'div', {},
+                        NText, {},
                         {
                             default: () => '进度'
                         }
@@ -165,7 +168,7 @@ const menuOptions = [
                                 onDragend: progressDragend,
                             }),
                             h(
-                                'div', {
+                                NText, {
                                 class: 'ml-2 whitespace-nowrap',
                             },
                                 {
@@ -179,6 +182,31 @@ const menuOptions = [
         }
     },
 ];
+
+// 设置主题
+const setTheme = () => {
+    if (rendition) {
+        // 检查是否为自动模式
+        if (settingStore.setting.theme == 'auto') {
+            // 检查系统主题
+            if (osTheme.value == 'dark') {
+                rendition.themes.select('dark');
+            } else {
+                rendition.themes.select('light');
+            }
+            return;
+        }
+
+        // 检查是否为黑暗模式
+        if (settingStore.setting.theme == 'dark') {
+            rendition.themes.select('dark');
+            return;
+        }
+
+        rendition.themes.select('light');
+    };
+}
+
 
 // 渲染epub阅读器
 const render = () => {
@@ -207,6 +235,23 @@ const render = () => {
             resizeOnOrientationChange: true, // 屏幕尺寸变化时自动调整
             allowScriptedContent: true, // 允许脚本
         });
+
+        // 注册主题
+        rendition.themes.register("dark", {
+            body: {
+                color: "#fff",
+                background: "#101014",
+            },
+        });
+        rendition.themes.register("light", {
+            body: {
+                color: "#000",
+                background: "#fff",
+            },
+        });
+
+        // 设置主题
+        setTheme();
 
         // 渲染
         await rendition.display(props.pagination.page - 1);
@@ -343,6 +388,11 @@ const menuHandleSelect = (key: string) => {
             break;
     }
 };
+
+// 监听主题设置变化
+watch(() => settingStore.setting.theme, () => {
+    setTheme();
+});
 
 // 组件挂载时加载数据
 onMounted(() => {
