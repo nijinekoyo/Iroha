@@ -1,7 +1,7 @@
 <!--
  * @Author: nijineko
  * @Date: 2024-01-20 01:38:38
- * @LastEditTime: 2024-01-20 01:58:58
+ * @LastEditTime: 2024-01-20 02:45:52
  * @LastEditors: nijineko
  * @Description: 设置模态框提供器
  * @FilePath: \Epub-Reader\src\renderer\src\components\setting\provider.vue
@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 import { NModal, NForm, NFormItem, NRadio, NRadioGroup, NSpace } from 'naive-ui';
-import { provide, ref, watch } from 'vue';
+import { onMounted, provide, ref, watch } from 'vue';
 import { useSettingStore } from '@renderer/plugins/store';
 import { setting } from '@/typings/setting';
 
@@ -40,8 +40,6 @@ let settingStore = useSettingStore();
 
 const show = ref(false);
 
-// 初始化设置
-settingStore.updateSetting();
 const settingForm = ref<setting>(settingStore.setting);
 
 // 打开设置框
@@ -61,11 +59,18 @@ provide('useSetting', {
 })
 
 // 监听设置表单变化
-watch(settingForm.value, (newValue) => {
+watch(() => settingForm.value, (newValue) => {
     newValue.bookSort = settingStore.setting.bookSort;
 
     settingStore.setSetting(newValue);
 }, { deep: true })
+
+// 组件挂载时，更新设置状态
+onMounted(async () => {
+    await settingStore.updateSetting();
+
+    settingForm.value = settingStore.setting;
+})
 </script>
 
 <style scoped></style>
