@@ -1,5 +1,5 @@
 {
-  "name": "epub-reader",
+  "name": "iroha",
   "version": "1.0.0",
   "description": "Epub reader",
   "main": "./out/main/index.js",

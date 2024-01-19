@@ -1,7 +1,7 @@
 /*
  * @Author: nijineko
  * @Date: 2024-01-16 12:12:54
- * @LastEditTime: 2024-01-20 00:55:17
+ * @LastEditTime: 2024-01-20 02:58:10
  * @LastEditors: nijineko
  * @Description: 路由
  * @FilePath: \Epub-Reader\src\renderer\src\plugins\router\index.ts
@@ -21,8 +21,18 @@ const router = createRouter({
     routes: modules,
 })
 
+// 定义页面标题
+let title = "Iroha"
+
 // 注册路由前置守卫
-router.beforeEach(async (_to, _from, next) => {
+router.beforeEach(async (to, _from, next) => {
+    // 判断是否有标题
+    if (to.meta.title) {
+        document.title = title + " - " + to.meta.title.toString()
+    } else {
+        document.title = title
+    }
+
     // 更新设置信息
     await settingStore.updateSetting()
 

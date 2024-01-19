@@ -1,7 +1,7 @@
 <!--
  * @Author: nijineko
  * @Date: 2024-01-19 20:36:11
- * @LastEditTime: 2024-01-19 21:01:10
+ * @LastEditTime: 2024-01-20 02:57:13
  * @LastEditors: nijineko
  * @Description: 阅读器页面
  * @FilePath: \Epub-Reader\src\renderer\src\pages\book\read.vue
@@ -45,6 +45,9 @@ const getBook = async () => {
     try {
         // 获取书籍数据
         let bookData = await window.bookManagement.getBook(Number(route.params.id));
+
+        // 修改页面标题
+        document.title = 'Iroha - ' + bookData.name;
 
         // 赋值阅读进度
         paginationData.value.page = bookData.progress;

@@ -1,5 +1,5 @@
-appId: com.electron.app
-productName: epub-reader
+appId: com.nijineko.iroha
+productName: iroha
 directories:
   buildResources: build
 files:
@@ -12,7 +12,7 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: epub-reader
+  executableName: iroha
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}

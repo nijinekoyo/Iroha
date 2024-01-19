@@ -17,6 +17,9 @@ export default [
                 path: '/',
                 name: "home",
                 component: () => import('@renderer/pages/home.vue'),
+                meta: {
+                    title: "书架"
+                }
             },
             {
                 path: '/book/:id',
