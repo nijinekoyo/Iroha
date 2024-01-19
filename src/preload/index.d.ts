@@ -9,7 +9,7 @@ declare global {
     api: unknown
     fs: any
     bookManagement: {
-      getBooks: () => Promise<books[]>
+      getBooks: (name?: string, order?: string) => Promise<books[]>
       getBook: (id: number) => Promise<books>
       createBook: (book: books) => Promise<number>
       updateBook: (book: books) => Promise<void>

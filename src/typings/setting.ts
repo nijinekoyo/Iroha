@@ -9,5 +9,5 @@
 // 设置类型
 export type setting = {
     theme: 'auto' | 'light' | 'dark' // 主题
-    bookSort: 'id ASC' | 'id DESC' | 'name ASC' | 'name DESC' | 'updated_at ASC' | 'updated_at DESC' // 书籍排序
+    bookSort: 'id ASC' | 'id DESC' | 'updated_at ASC' | 'updated_at DESC' // 书籍排序
 }

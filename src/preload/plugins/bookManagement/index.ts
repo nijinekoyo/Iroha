@@ -1,7 +1,7 @@
 /*
  * @Author: nijineko
  * @Date: 2024-01-17 22:41:46
- * @LastEditTime: 2024-01-19 22:08:09
+ * @LastEditTime: 2024-01-20 01:25:22
  * @LastEditors: nijineko
  * @Description: 书籍管理封装
  * @FilePath: \Epub-Reader\src\preload\plugins\bookManagement\index.ts
@@ -34,11 +34,18 @@ const getBooks = async (name?: string, order?: string): Promise<books[]> => {
         order = 'id DESC'
     }
 
+    let where = ''
+    let params: any[] = []
+    if (name) {
+        where += 'WHERE name LIKE ?'
+        params.push(`%${name}%`)
+    }
+
     return await db.all<books[]>(`
     SELECT * FROM books 
-    ${name ? 'WHERE name LIKE "%?%"' : ''}
-    ORDER BY ?
-    `, ...name ? [name, order] : [order])
+    ${where}
+    ORDER BY ${order}
+    `, ...params)
 }
 
 /**
