@@ -1,7 +1,7 @@
 /*
  * @Author: nijineko
  * @Date: 2024-01-19 01:25:06
- * @LastEditTime: 2024-01-19 01:59:34
+ * @LastEditTime: 2024-01-19 21:27:39
  * @LastEditors: nijineko
  * @Description: 书籍工具封装
  * @FilePath: \Epub-Reader\src\renderer\src\tools\book\index.ts
@@ -144,7 +144,10 @@ const dialogContentRendering = (coverURL: string | null, bookData: {
                         )
                     ),
                     h(
-                        'div', {},
+                        'div',
+                        {
+                            class: 'ml-2'
+                        },
                         h(
                             'div',
                             {},

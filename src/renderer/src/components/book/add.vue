@@ -1,24 +1,24 @@
 <!--
  * @Author: nijineko
  * @Date: 2024-01-18 22:13:26
- * @LastEditTime: 2024-01-19 12:09:06
+ * @LastEditTime: 2024-01-19 21:38:05
  * @LastEditors: nijineko
  * @Description: 添加书籍组件
  * @FilePath: \Epub-Reader\src\renderer\src\components\book\add.vue
 -->
 <template>
     <div>
-        <n-upload :max="1" directory-dnd accept=".epub" :show-file-list="false" v-model:file-list="fileList"
+        <n-upload :max="1" accept=".epub" :show-file-list="false" v-model:file-list="fileList"
             :custom-request="bookAdd">
             <div class="w-40 h-60">
                 <n-upload-dragger class="w-full h-full">
-                    <div class="mt-5">
+                    <div class="mt-7">
                         <n-icon size="48" :depth="3">
                             <archive-icon />
                         </n-icon>
                     </div>
                     <n-text class="text-base">
-                        点击或者拖动Epub文件到该区域导入
+                        点击导入Epub文件
                     </n-text>
                 </n-upload-dragger>
             </div>
