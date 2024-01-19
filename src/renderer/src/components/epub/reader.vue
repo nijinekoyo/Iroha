@@ -1,7 +1,7 @@
 <!--
  * @Author: nijineko
  * @Date: 2024-01-15 22:34:52
- * @LastEditTime: 2024-01-18 18:01:36
+ * @LastEditTime: 2024-01-19 21:50:38
  * @LastEditors: nijineko
  * @Description: epub阅读器组件
  * @FilePath: \Epub-Reader\src\renderer\src\components\epub\reader.vue
@@ -270,8 +270,9 @@ const prevPage = async () => {
             // 切换到双页显示
             rendition.spread('auto')
 
+            let location: any = rendition.currentLocation();
             // 更新分页数据
-            paginationData.value.displayedTotal = 2;
+            paginationData.value.displayedTotal = location.start.displayed.total;
 
             // 更新渲染器，解决错页问题
             await rendition.display(paginationData.value.page - 1);
@@ -297,8 +298,9 @@ const progressDragend = async () => {
             // 切换到双页显示
             rendition.spread('auto')
 
+            let location: any = rendition.currentLocation();
             // 更新分页数据
-            paginationData.value.displayedTotal = 2;
+            paginationData.value.displayedTotal = location.start.displayed.total;
         }
 
         // 检查是否是拖到最后一页
